@@ -1,66 +1,191 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# HandyHive Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+HandyHive's backend API is built with Laravel 11, providing a robust and scalable service layer for connecting South African households with verified domestic service providers.
 
-## About Laravel
+## Tech Stack
+- Laravel 11
+- MySQL/PostgreSQL
+- Laravel Sanctum
+- Laravel Echo
+- Laravel Socialite
+- Laravel Queue
+- Laravel Cashier
+- PHPUnit
+- Laravel Horizon
+- Laravel Telescope
+- Laravel Nova
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
+- PHP 8.2 or higher
+- Composer 2.x
+- MySQL 8.0 or PostgreSQL 14+
+- Redis
+- Git
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Clone the repository:
+```bash
+git clone git@github.com:your-organization/handyhive-backend.git
+cd handyhive-backend
+```
 
-## Learning Laravel
+2. Install dependencies:
+```bash
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. Generate application key:
+```bash
+php artisan key:generate
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. Set up the database:
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-## Laravel Sponsors
+6. Start the development server:
+```bash
+php artisan serve
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+The API will be available at `http://localhost:8000`
 
-### Premium Partners
+## Development
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Available Commands
+- `php artisan serve` - Start development server
+- `php artisan test` - Run tests
+- `php artisan migrate` - Run database migrations
+- `php artisan queue:work` - Start queue worker
+- `php artisan horizon` - Start Horizon
+- `php artisan telescope` - Access Telescope dashboard
+
+### Required Services
+- Redis (for caching and queues)
+- MySQL/PostgreSQL (for database)
+- Pusher (for real-time features)
+
+## Testing
+We maintain a minimum of 90% test coverage. Run tests with:
+```bash
+php artisan test --coverage
+```
+
+## Project Structure
+```
+app/
+├── Console/          # Console commands
+├── Exceptions/       # Exception handlers
+├── Http/
+│   ├── Controllers/ # API controllers
+│   ├── Middleware/  # HTTP middleware
+│   └── Requests/    # Form requests
+├── Models/          # Eloquent models
+├── Providers/       # Service providers
+├── Services/        # Business logic
+├── Repositories/    # Data access layer
+└── Jobs/           # Queue jobs
+```
+
+## API Documentation
+API documentation is available at `/api/documentation` when the application is running.
+
+### API Versioning
+All API endpoints are versioned and prefixed with `/api/v1/`
+
+### Authentication
+We use Laravel Sanctum for API authentication. Include the authentication token in the Authorization header:
+```
+Authorization: Bearer your-token-here
+```
+
+## Performance Requirements
+- API response time: < 200ms
+- Real-time updates: < 500ms latency
+- Concurrent users: 20,000+
+- 99.95% uptime
+
+## Security
+- POPI Act compliant
+- Data encryption: AES-256 for data at rest
+- TLS 1.3 for data in transit
+- Regular security audits
+- Rate limiting and DDOS protection
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Create a feature branch from `develop`:
+```bash
+git checkout -b feature/your-feature-name
+```
 
-## Code of Conduct
+2. Commit your changes:
+```bash
+git commit -m "feat: add your feature"
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Push to your branch:
+```bash
+git push origin feature/your-feature-name
+```
 
-## Security Vulnerabilities
+4. Create a Pull Request to `develop`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Branch Naming Convention
+- Feature: `feature/descriptive-name`
+- Bugfix: `bugfix/descriptive-name`
+- Hotfix: `hotfix/descriptive-name`
+
+### Code Style
+We follow PSR-12 coding standards. Run code style checks:
+```bash
+./vendor/bin/phpcs
+```
+
+### Commit Message Convention
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation changes
+- style: Code style changes
+- refactor: Code refactoring
+- test: Test changes
+- chore: Build process or auxiliary tool changes
+
+## Deployment
+The application is configured for deployment on Digital Ocean/AWS:
+1. Set up server environment
+2. Configure environment variables
+3. Run migrations
+4. Set up queue workers
+5. Configure supervisor
+6. Set up monitoring
+
+## Monitoring
+- Laravel Telescope for local debugging
+- Laravel Horizon for queue monitoring
+- NewRelic for performance monitoring
+- CloudWatch for logs
+- Sentry for error tracking
+
+## Documentation
+- [API Documentation](./docs/api.md)
+- [Database Schema](./docs/database.md)
+- [Queue System](./docs/queues.md)
+- [Security Guidelines](./docs/security.md)
+- [Testing Guide](./docs/testing.md)
+
+## Support
+For support, contact the development team at [dev@handyhive.co.za](mailto:dev@handyhive.co.za)
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+[MIT License](./LICENSE)
