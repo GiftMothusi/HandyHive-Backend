@@ -39,7 +39,16 @@ class AuthController extends Controller
                 'email_verified_at' => null,
             ]);
 
-            event(new Registered($user));
+            // Wrap email verification in try-catch to prevent registration failure
+            try {
+                event(new Registered($user));
+            } catch (Throwable $emailError) {
+                // Log email error but continue with registration
+                Log::warning('Email verification could not be sent', [
+                    'user_id' => $user->id,
+                    'error' => $emailError->getMessage()
+                ]);
+            }
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
