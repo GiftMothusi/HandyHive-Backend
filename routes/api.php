@@ -22,6 +22,7 @@ Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
 Route::post('/auth/verify-phone', [AuthController::class, 'verifyPhone']);
+Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 // 6.2 Users
 Route::middleware(['auth:sanctum'])->group(function () {
