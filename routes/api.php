@@ -7,6 +7,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProviderServiceController;
+use App\Http\Controllers\StaffProfileController;
+use App\Http\Controllers\Admin\AdminApprovalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,12 +49,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/bookings/{id}/rate', [BookingController::class, 'rate']);
     Route::get('/bookings/{id}/tracking', [BookingController::class, 'tracking']);
 
-    // Payment Routes
-    Route::post('/payments/initialize', [PaymentController::class, 'initialize']);
-    Route::post('/payments/confirm', [PaymentController::class, 'confirm']);
-    Route::post('/payments/refund', [PaymentController::class, 'refund']);
-    Route::get('/payments/history', [PaymentController::class, 'history']);
-    Route::get('/payments/{id}/status', [PaymentController::class, 'status']);
+    // TODO: Payment Routes
+    // Route::post('/payments/initialize', [PaymentController::class, 'initialize']);
+    // Route::post('/payments/confirm', [PaymentController::class, 'confirm']);
+    // Route::post('/payments/refund', [PaymentController::class, 'refund']);
+    // Route::get('/payments/history', [PaymentController::class, 'history']);
+    // Route::get('/payments/{id}/status', [PaymentController::class, 'status']);
+
+    // Provider Services Management
+    Route::get('/provider/services', [ProviderServiceController::class, 'index']);
+    Route::post('/provider/services', [ProviderServiceController::class, 'store']);
+    Route::get('/provider/services/{id}', [ProviderServiceController::class, 'show']);
+    Route::put('/provider/services/{id}', [ProviderServiceController::class, 'update']);
+    Route::delete('/provider/services/{id}', [ProviderServiceController::class, 'destroy']);
+
+    // Staff Profiles Management
+    Route::get('/provider/staff', [StaffProfileController::class, 'index']);
+    Route::post('/provider/staff', [StaffProfileController::class, 'store']);
+    Route::get('/provider/staff/{id}', [StaffProfileController::class, 'show']);
+    Route::put('/provider/staff/{id}', [StaffProfileController::class, 'update']);
+    Route::delete('/provider/staff/{id}', [StaffProfileController::class, 'destroy']);
+
+    // Admin Approval Routes
+    Route::middleware(['admin'])->prefix('admin')->group(function () {
+        Route::get('/pending-services', [AdminApprovalController::class, 'getPendingServices']);
+        Route::get('/pending-staff', [AdminApprovalController::class, 'getPendingStaffProfiles']);
+        Route::post('/approve-service/{id}', [AdminApprovalController::class, 'approveService']);
+        Route::post('/approve-staff/{id}', [AdminApprovalController::class, 'approveStaffProfile']);
+    });
 });
 
 // Public Service Routes
