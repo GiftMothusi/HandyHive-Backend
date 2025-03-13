@@ -7,17 +7,40 @@
 /storage/pail
 /vendor
 .env
-.env.backup
-.env.production
-.phpactor.json
+.env.*
+!.env.example
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
-npm-debug.log
-yarn-error.log
-/auth.json
+auth.json
+
+# Laravel Telescope
+/storage/debugbar
+
+# Laravel Logs
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Laravel Framework
+bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# Composer
+composer.phar
+
+# IDE specific
 /.fleet
 /.idea
-/.nova
 /.vscode
+/.nova
 /.zed
+.phpactor.json
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Debug files
+npm-debug.log
+yarn-error.log
+*.log
