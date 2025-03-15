@@ -24,16 +24,15 @@ class ProviderServiceController extends Controller
             $user = Auth::user();
 
             // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
-            $services = ProviderService::where('provider_id', $provider->id)->get();
+            // Get services directly using the user_id instead of provider_id
+            $services = ProviderService::where('provider_id', $user->id)->get();
 
             return response()->json([
                 'message' => 'Services retrieved successfully',
@@ -63,13 +62,11 @@ class ProviderServiceController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
@@ -89,7 +86,7 @@ class ProviderServiceController extends Controller
             }
 
             $service = new ProviderService();
-            $service->provider_id = $provider->id;
+            $service->provider_id = $user->id; // Use user_id directly
             $service->title = $request->title;
             $service->description = $request->description;
             $service->price = $request->price;
@@ -125,18 +122,16 @@ class ProviderServiceController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
             $service = ProviderService::where('id', $id)
-                                      ->where('provider_id', $provider->id)
+                                      ->where('provider_id', $user->id)
                                       ->first();
 
             if (!$service) {
@@ -176,18 +171,16 @@ class ProviderServiceController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
             $service = ProviderService::where('id', $id)
-                                      ->where('provider_id', $provider->id)
+                                      ->where('provider_id', $user->id)
                                       ->first();
 
             if (!$service) {
@@ -271,18 +264,16 @@ class ProviderServiceController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
             $service = ProviderService::where('id', $id)
-                                      ->where('provider_id', $provider->id)
+                                      ->where('provider_id', $user->id)
                                       ->first();
 
             if (!$service) {

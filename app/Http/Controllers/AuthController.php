@@ -29,6 +29,9 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         try {
+            // Start a database transaction to ensure both user and provider are created or neither
+            \Illuminate\Support\Facades\DB::beginTransaction();
+            
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -38,6 +41,27 @@ class AuthController extends Controller
                 'status' => 'active',
                 'email_verified_at' => null,
             ]);
+            
+            // If user type is provider, create a service provider record
+            if ($request->userType === 'provider') {
+                try {
+                    \App\Models\ServiceProvider::create([
+                        'user_id' => $user->id,
+                        'description' => 'Service provider',
+                        'category' => $user->name . "'s Services",
+                        'status' => 'active',
+                    ]);
+                } catch (\Throwable $providerError) {
+                    // Log the specific provider creation error
+                    Log::error('Failed to create service provider record', [
+                        'user_id' => $user->id,
+                        'error' => $providerError->getMessage(),
+                        'trace' => $providerError->getTraceAsString()
+                    ]);
+                    
+                    // We'll still continue as the user was created successfully
+                }
+            }
 
             // Wrap email verification in try-catch to prevent registration failure
             try {
@@ -51,6 +75,9 @@ class AuthController extends Controller
             }
 
             $token = $user->createToken('auth_token')->plainTextToken;
+            
+            // Commit the transaction as everything succeeded
+            \Illuminate\Support\Facades\DB::commit();
 
             return response()->json([
                 'message' => 'User registered successfully',
@@ -66,14 +93,25 @@ class AuthController extends Controller
                 'token' => $token
             ], 201);
         } catch (Throwable $e) {
+            // Rollback the transaction if anything failed
+            \Illuminate\Support\Facades\DB::rollBack();
+            
             Log::error('Registration failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
 
+            // Check if it's a database integrity error (likely duplicate email)
+            if (strpos($e->getMessage(), 'Integrity constraint violation') !== false) {
+                return response()->json([
+                    'message' => 'Registration failed. Email already exists.',
+                    'errors' => ['email' => ['This email is already registered']]
+                ], 422);
+            }
+
             return response()->json([
                 'message' => 'Registration failed. Please try again.',
-                'errors' => ['email' => ['Unable to create account']]
+                'errors' => ['general' => ['An unexpected error occurred during registration. Please try again.']]
             ], 500);
         }
     }

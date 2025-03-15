@@ -24,17 +24,16 @@ class StaffProfileController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
-            $staffProfiles = StaffProfile::where('provider_id', $provider->id)->get();
+            // Get staff profiles directly using the user_id instead of provider_id
+            $staffProfiles = StaffProfile::where('provider_id', $user->id)->get();
 
             return response()->json([
                 'message' => 'Staff profiles retrieved successfully',
@@ -64,13 +63,11 @@ class StaffProfileController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
@@ -134,13 +131,11 @@ class StaffProfileController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
@@ -185,13 +180,11 @@ class StaffProfileController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
@@ -293,13 +286,11 @@ class StaffProfileController extends Controller
         try {
             $user = Auth::user();
 
-            // Check if user is a service provider
-            $provider = ServiceProvider::where('user_id', $user->id)->first();
-
-            if (!$provider) {
+            // Check if user is a service provider directly from the users table
+            if ($user->user_type !== 'provider') {
                 return response()->json([
                     'message' => 'You are not registered as a service provider',
-                    'errors' => ['provider' => ['Service provider profile not found']]
+                    'errors' => ['provider' => ['User is not a service provider']]
                 ], 403);
             }
 
