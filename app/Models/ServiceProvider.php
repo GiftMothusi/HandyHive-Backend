@@ -64,4 +64,22 @@ class ServiceProvider extends Model
     {
         return $this->hasMany(Review::class, 'ratee_id');
     }
+
+    /**
+     * Get the services provided by this service provider.
+     */
+    public function services(): HasMany
+    {
+        return $this->hasMany(ProviderService::class, 'provider_id');
+    }
+
+     /**
+     * Get the staff profiles for this service provider.
+     */
+    public function staffProfiles(): HasMany
+    {
+        return $this->hasMany(StaffProfile::class, 'provider_id');
+    }
+
+
 }
